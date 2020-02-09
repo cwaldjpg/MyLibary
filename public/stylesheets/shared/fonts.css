@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'FS Core Magic Rough';
+    src: url('/fonts/FSCoreMagicRough.woff2') format('woff2'),
+        url('/fonts/FSCoreMagicRough.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'iCiel Fester Semi-Condensed';
+    src: url('/fonts/iCielFesterSemiCondensed-Bold.woff2') format('woff2'),
+        url('/fonts/iCielFesterSemiCondensed-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat Semi';
+    src: url('/fonts/Montserrat-SemiBold.woff2') format('woff2'),
+        url('/fonts/Montserrat-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+
