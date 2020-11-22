@@ -1,15 +1,23 @@
 const express = require('express')
-const app = express()
 const expressLayouts = require('express-ejs-layouts')
+const expressSession = require('express-session')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+const passport = require('passport')
+const localStrategy = require('passport-local')
+const passportLocalMongoose   = require('passport-local-mongoose')
+
+const User = require('./models/user')
+
+const app = express()
 
 const indexRouter = require('./routes/index')
+const userRouter = require('./routes/users')
 const authorRouter = require('./routes/authors')
 const bookRouter = require('./routes/books')
 
-mongoose.connect('mongodb+srv://admin:admin@for-final-jt0cq.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true})
+mongoose.connect('mongodb+srv://admin:admin@mylibary.jt0cq.mongodb.net/MyLibary?retryWrites=true&w=majority', {useNewUrlParser: true})
 .then(result => {
   console.log('connect to DB')
 })
@@ -25,7 +33,20 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({limit:'10mb', extended: false}))
 app.use(methodOverride('_method'))
 
+app.use(expressSession({    
+  secret:'Hello World, this is a session',    
+  resave: false,
+  saveUninitialized: false
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use('/', indexRouter)
+app.use('/users', userRouter)
 app.use('/authors', authorRouter)
 app.use('/books', bookRouter)
 
