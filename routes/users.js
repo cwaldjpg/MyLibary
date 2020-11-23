@@ -1,5 +1,7 @@
 const express = require('express')
 const _ = require('lodash') 
+const bcrypt = require('bcrypt')
+const passport = require('passport')
 
 const User = require('../models/user')
 const router = express.Router()
@@ -13,39 +15,67 @@ router.get('/register', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-
+  req.logout()
+  eq.flash('success_msg','You have logged out')
+  res.redirect('/')
 })
 
 //Middleware handle
 router.post('/register', async (req, res) => {
   const { name, email, password, password2 } = req.body
-  let errorMessage
-  if (_.isEmpty(name) || _.isEmpty(email) || _.isEmpty(password) || _.isEmpty(password2)) errorMessage = 'Please fill all the field'
-  if (password !== password2) errorMessage = 'Password not match'
-  if (password.length < 6) errorMessage = 'Password atleast 6 characters'
+  let errors = []
+  if (_.isEmpty(name) || _.isEmpty(email) || _.isEmpty(password) || _.isEmpty(password2)) errors.push('Please fill all the field')
+  if (password.length < 6) errors.push('Password atleast 6 characters')
+  if (password !== password2) errors.push('Password not match')
 
-  if (errorMessage.length > 0) {
+  if (errors.length > 0) {
     res.render('register', {
-      errorMessage: errorMessage,
+      errorMessage: errors[0],
       name: name,
       email: email,
       password: password,
       password2: password2
     })
   } else {
-    try {
-      const user = await User.findOne({ email: email })
-      console.log(user)
-    } catch {
+    const user = await User.find({ email: email })
+    
+    if (!_.isEmpty(user)) {
       res.render('register', {
         errorMessage: 'Email already registered'
       })
+    } else {
+      const newUser = new User({
+        name: name,
+        email: email,
+        password: password,
+        role: 0
+      })
+      try {
+        bcrypt.genSalt(10, (err, salt) => 
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err
+            newUser.password = hash
+          })
+        )
+        await newUser.save()
+        req.flash('success_msg','You have now registered!')
+        res.redirect('/users/login')
+      } catch(err) {
+        console.log(err)
+        res.render('register', {
+          errorMessage: 'Something wrong with API'
+        })
+      }
     }
   }
 })
 
 router.post('/login', (req, res) => {
-
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash  : true
+  })
 })
 
 module.exports = router

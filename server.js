@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const passport = require('passport')
 const localStrategy = require('passport-local')
-const passportLocalMongoose   = require('passport-local-mongoose')
+const flash = require('connect-flash')
 
 const User = require('./models/user')
 
@@ -44,6 +44,13 @@ app.use(passport.session())
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(flash());
+app.use((req,res,next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+})
 
 app.use('/', indexRouter)
 app.use('/users', userRouter)
