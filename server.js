@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const passport = require('passport')
 const flash = require('connect-flash')
+const _ = require('lodash')
 
 const app = express()
 
@@ -46,6 +47,10 @@ app.use((req,res,next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
+  res.locals.currentUser = null;
+  if (_.has(req, 'session.passport.user')) {
+    res.locals.currentUser = req.session.passport.user
+  }
   next();
 })
 

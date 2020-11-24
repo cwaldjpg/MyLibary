@@ -5,7 +5,6 @@ const User = require('../models/user')
 module.exports = (passport) => {
   passport.use(new LocalStrategy({usernameField: 'email'}, async (email, password, done) => {
     try {
-      console.log('****login')
       const user = await User.findOne({ email: email })
       if (!user) {
         return done(null,false, { message:'Email not registered' });
@@ -17,16 +16,13 @@ module.exports = (passport) => {
         return done(null, false, { message:'Password incorrect'})
       }
     } catch(err) {
-      console.log(err)
       done(err)
     }
   }))
   passport.serializeUser((user, done) => {
-    console.log('mehh why not')
-    done(null, user.id);
+    done(null, user);
   })
   passport.deserializeUser((id, done) => {
-    console.log('something')
     User.findById(id, (err, user) => {
       done(err, user);
     })

@@ -2,12 +2,18 @@
   <nav class='header-nav'>
     <a class='header-title' href='/'>My Library</a>
     <ul>
-      <li><a href='/users/login'>Login</a></li>
-      <li><a href='/users/register'>Register</a></li>
-      <li><a href='/authors'>Authors</a></li>
-      <li><a href='/authors/new'>Add Author</a></li>
-      <li><a href='/books'>Books</a></li>
-      <li><a href='/books/new'>Add Book</a></li>
+      <% if (currentUser == null) { %>
+        <li><a href='/users/login'>Login</a></li>
+        <li><a href='/users/register'>Register</a></li>
+      <% } %>
+      <% if (currentUser && currentUser.role === 0) { %>
+        <li><a href='/authors'>Authors</a></li>
+        <li><a href='/books'>Books</a></li>
+      <% } %>
+      <% if (currentUser && currentUser.role === 1) { %>
+        <li><a href='/authors/new'>Add Author</a></li>
+        <li><a href='/books/new'>Add Book</a></li>
+      <% } %>
     </ul>
   </nav>
 </header>
