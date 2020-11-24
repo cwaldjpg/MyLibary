@@ -5,12 +5,11 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const passport = require('passport')
-const localStrategy = require('passport-local')
 const flash = require('connect-flash')
 
-const User = require('./models/user')
-
 const app = express()
+
+require('./config/passport')(passport)
 
 const indexRouter = require('./routes/index')
 const userRouter = require('./routes/users')
@@ -34,21 +33,19 @@ app.use(bodyParser.urlencoded({limit:'10mb', extended: false}))
 app.use(methodOverride('_method'))
 
 app.use(expressSession({    
-  secret:'Hello World, this is a session',    
+  secret:'this is a session',    
   resave: false,
   saveUninitialized: false
 }))
 
 app.use(passport.initialize())
 app.use(passport.session())
-passport.use(new localStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 app.use(flash());
 app.use((req,res,next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   next();
 })
 

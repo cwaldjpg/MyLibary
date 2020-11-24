@@ -51,12 +51,7 @@ router.post('/register', async (req, res) => {
         role: 0
       })
       try {
-        bcrypt.genSalt(10, (err, salt) => 
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err
-            newUser.password = hash
-          })
-        )
+        newUser.password = await bcrypt.hash(newUser.password, 10)
         await newUser.save()
         req.flash('success_msg','You have now registered!')
         res.redirect('/users/login')
@@ -70,12 +65,10 @@ router.post('/register', async (req, res) => {
   }
 })
 
-router.post('/login', (req, res) => {
-  passport.authenticate('local', {
+router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/users/login',
     failureFlash  : true
-  })
-})
+}))
 
 module.exports = router
