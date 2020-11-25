@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Book = require('../models/book')
 const Author = require('../models/author')
+const Location = require('../models/location')
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif']
 
 //Search  
@@ -129,8 +130,10 @@ async function renderEditPage(res, book, hasError = false) {
 async function renderFormPage(res, book, form, hasError = false) {
   try {
     const authors = await Author.find({})
+    const locations = await Location.find({})
     const params = {
       authors: authors,
+      locations: locations,
       book: book
     }
     if (hasError) {

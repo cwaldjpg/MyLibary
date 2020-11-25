@@ -19,7 +19,9 @@
     <div class="description"><%= book.publishDate.toDateString() %></div>
     <div class="book-details-label">Page Count:</div>
     <div class="description"><%= book.pageCount %></div>
-    <div class="book-details-label">Description:</div>
-    <div class="description"><%= book.description %></div>
+    <% if (book.description) { %>
+      <div class="book-details-label">Description:</div>
+      <div class="description"><%= book.description %></div>
+    <% } %>
   </div>
 </div>

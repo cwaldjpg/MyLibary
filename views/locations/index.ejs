@@ -1,0 +1,26 @@
+<h2 class="page-header">Search Locations</h2>
+<form action="/authors" method="GET">
+  <div class="form-row">
+    <div class="form-item">
+      <label>Name</label>
+      <input type="text" name="name" value="<%= searchOptions.name %>">
+    </div>
+  </div>
+  <div class="form-row form-row-end">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </div>
+</form>
+<br>
+<% locations.forEach(location => { %>
+  <div class="author-row">
+    <div class="author-name"><%= location.name %></div>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/locations/<%= location.id %>">View</a>
+      <% if (currentUser && currentUser.role === 1) { %>
+        <a class="btn btn-primary" href="/locations/<%= location.id %>/edit">Edit</a>
+        <%- include('../partials/deleteForm',
+                    { url: `/locations/${location.id}` }) %>
+      <% } %>
+    </div>
+  </div>
+<% }) %>

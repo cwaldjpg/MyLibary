@@ -11,15 +11,18 @@
   font-family: 'Montserrat Semi';
 }
 
-.form-item {
+.form-item { 
   display: flex;
   flex-direction: column;
-  margin-left: 2rem;
   flex-grow: 1;
   flex-basis: 0;
 }
 
-.form-item:first-child {
+.form-row > .form-item {
+  margin-left: 2rem;
+}
+
+.form-row > .form-item:first-child {
   margin-left: 0;
 }
 

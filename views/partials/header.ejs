@@ -14,6 +14,9 @@
         <li><a href='/authors/new'>Add Author</a></li>
         <li><a href='/books/new'>Add Book</a></li>
       <% } %>
+      <% if (currentUser) { %>
+        <li><a href='/users/logout'>Logout</a></li>
+      <% } %>
     </ul>
   </nav>
 </header>

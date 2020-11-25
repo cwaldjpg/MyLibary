@@ -30,6 +30,25 @@
 </div>
 
 <div class="form-row">
+  <div class="form-item">
+    <label>Location</label>
+    <select name="location">
+      <% locations.forEach(location => { %>
+        <% if (location.id === book.location) { %>
+          <option selected label="<%= location.name %>" value="<%= location.id %>">
+        <% } else { %>
+          <option label="<%= location.name %>" value="<%= location.id %>">
+        <% } %>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-item">
+    <label>Inventory</label>
+    <input type="number" name="pageCount" min="1" value="<%= book.pageCount %>">
+  </div>
+</div>
+
+<div class="form-row">
   <div class="form-item form-item-no-grow">
     <label>Cover</label>
     <input type="file" name="cover" class="book-cover filepond">

@@ -1,0 +1,10 @@
+<div class="auth-container">
+  <h2 class="page-header" style="margin: 0">Register</h2>
+  <form action="/users/register" method="POST">
+    <%- include('_form_fields') %>
+    <div class="auth-submit">
+      <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </div>
+  </form>
+  <p class="auth-change">Have An Account? <a href="/users/login">Login</a></p>
+</div>

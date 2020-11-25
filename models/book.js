@@ -29,6 +29,16 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  inventory: {
+    type: Number,
+    required: true,
+    default: 1
+  },
+  location: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Location'
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

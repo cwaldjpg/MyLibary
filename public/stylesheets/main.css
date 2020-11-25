@@ -5,6 +5,7 @@
 @import 'shared/form.css';
 @import 'shared/author.css';
 @import 'shared/books.css';
+@import 'shared/auth.css';
 
 :root {
   font-family: 'FS Core Magic Rough';
@@ -35,6 +36,18 @@ body {
   font-weight: 500;
 }
 
+@media only screen and (max-width: 480px){
+  .page-header {
+    font-size: 1rem;
+  }
+}
+
 .error-message {
+  text-align: center;
   color: hsl(var(--color-danger-hue), 100%, 50%);
+}
+
+.success-message {
+  text-align: center;
+  color: #26ff00;
 }

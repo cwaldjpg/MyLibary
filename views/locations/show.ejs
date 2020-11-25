@@ -1,0 +1,12 @@
+<h2 class="page-header"><%= location.name %></h2>
+<div class="btn-row">
+  <% if (currentUser && currentUser.role === 1) { %>
+    <a class="btn btn-primary" href="/locations/<%= location.id %>/edit">Edit</a>
+    <%- include('../partials/deleteForm',{ url: `/locations/${location.id}` }) %>
+  <% } %>
+  <a class="btn btn-danger" href="/locations">Back</a>
+</div>
+<% if (booksByAuthor.length > 0) { %>
+  <h2 class="page-header">Books By <%= location.name %></h2>
+  <%- include('../partials/bookGrid', { books: booksByAuthor }) %>
+<% } %>

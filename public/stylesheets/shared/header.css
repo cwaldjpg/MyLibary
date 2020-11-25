@@ -11,12 +11,17 @@
   font-weight: var(--nav-title-font-weight);
 }
 
+@media only screen and (max-width: 480px){
+  .header-title {
+    font-size: 2rem;
+  }
+}
+
 .header-nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5rem;
 }
 
 .header-nav ul {
