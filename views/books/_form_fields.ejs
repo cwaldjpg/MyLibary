@@ -25,7 +25,7 @@
   </div>
   <div class="form-item">
     <label>Page Count</label>
-    <input type="number" name="pageCount" min="1" value="<%= book.pageCount %>">
+    <input type="number" name="pageCount" min="1" value="<%= book.pageCount ? book.pageCount : 1 %>">
   </div>
 </div>
 
@@ -44,7 +44,7 @@
   </div>
   <div class="form-item">
     <label>Inventory</label>
-    <input type="number" name="pageCount" min="1" value="<%= book.pageCount %>">
+    <input type="number" name="inventory" min="1" value="<%= book.inventory ? book.inventory : 1 %>">
   </div>
 </div>
 

@@ -1,22 +1,29 @@
-<h2 class="page-header"><%= book.title %></h2>
+<div style="display: flex; align-items: center;">
+  <h2 class="page-header" style="margin-right: 50px;"><%= book.title %></h2>
+</div>
 <div class="book-details">
   <div style="padding-right: 50px">
     <img class="book-cover" src="<%= book.coverImagePath %>">
-    <% if (currentUser && currentUser.role === 1) { %>
-      <div class="book-details-btn-grid">
+    <div class="book-details-btn-grid">
+      <% if (currentUser && currentUser.role === 1) { %>
         <a class="btn btn-primary" href="/books/<%= book.id %>/edit">Edit</a>
         <%- include('../partials/deleteForm', { url: `/books/${book.id}` }) %>
-        <a class="btn btn-primary book-details-author-button" href="/authors/<%= book.author.id %>">View Author</a>
-      </div>
-    <% } %>
-    <% if (currentUser && currentUser.role === 0) { %>
-    <% } %>
+      <% } %>
+      <a class="btn btn-primary book-details-author-button" href="/authors/<%= book.author.id %>">View Author</a>
+    </div>
+    <form method="POST" action="/orders/<%= book.id %>">
+      <button style="width: 100%; margin-top: 10px;" class="btn btn-secondary" type="submit">+ Wishlist</button>
+    </form>
   </div>
   <div class="book-details-grid">
     <div class="book-details-label">Author:</div>
     <div class="description"><%= book.author.name %></div>
+    <div class="book-details-label">Inventory:</div>
+    <div class="description"><%= book.inventory %></div>
     <div class="book-details-label">Publish Date:</div>
     <div class="description"><%= book.publishDate.toDateString() %></div>
+    <div class="book-details-label">Location:</div>
+    <div class="description"><%= book.location.name %></div>
     <div class="book-details-label">Page Count:</div>
     <div class="description"><%= book.pageCount %></div>
     <% if (book.description) { %>

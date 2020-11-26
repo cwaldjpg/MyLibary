@@ -62,4 +62,5 @@
 
 .description{
   font-family: 'Montserrat Semi';
+  white-space: pre-wrap;
 }

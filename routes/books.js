@@ -40,7 +40,9 @@ router.post('/', async (req, res) => {
     author: req.body.author,
     publishDate: new Date(req.body.publishDate),
     pageCount: req.body.pageCount,
-    description: req.body.description
+    description: req.body.description,
+    location: req.body.location,
+    inventory: req.body.inventory
   })
   saveCover(book, req.body.cover)
 
@@ -58,6 +60,7 @@ router.get('/:id', async (req, res) => {
   try {
     const book = await Book.findById(req.params.id)
                            .populate('author')
+                           .populate('location')
                            .exec()
     res.render('books/show', { book: book })
   } catch {

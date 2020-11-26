@@ -17,6 +17,7 @@ const userRouter = require('./routes/users')
 const authorRouter = require('./routes/authors')
 const bookRouter = require('./routes/books')
 const locationRouter = require('./routes/locations')
+const orderRouter = require('./routes/orders')
 
 mongoose.connect('mongodb+srv://admin:admin@mylibary.jt0cq.mongodb.net/MyLibary?retryWrites=true&w=majority', {useNewUrlParser: true})
 .then(result => {
@@ -60,6 +61,7 @@ app.use('/users', userRouter)
 app.use('/authors', authorRouter)
 app.use('/books', bookRouter)
 app.use('/locations', locationRouter)
+app.use('/orders', orderRouter)
 
 app.listen(3000,() => {
     console.log('Listening to port 3000')
