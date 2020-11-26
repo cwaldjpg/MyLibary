@@ -4,9 +4,56 @@ const bcrypt = require('bcrypt')
 const passport = require('passport')
 
 const User = require('../models/user')
+const Book = require('../models/book')
+const { ensureAuthenticated } = require('../config/auth') 
 const router = express.Router()
 
+router.get('/', async (req, res) => {
+  let searchOptions = {}
+  if (req.query.name != null && req.query.name !== '') {
+    searchOptions.name = new RegExp(req.query.name, 'i')
+  }
+  try {
+    const users = await User.find(searchOptions)
+    res.render('users/index', {
+      users: users,
+      searchOptions: req.query
+    })
+  } catch {
+    res.redirect('/')
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  let user
+  try {
+    user = await User.findById(req.params.id)
+    await user.remove()
+    res.redirect('/users')
+  } catch {
+    if (user == null) {
+      res.redirect('/')
+    } else {
+      res.redirect(`/users/${user.id}`)
+    }
+  }
+})
+
+router.get('/wishlist', ensureAuthenticated, async (req, res) => {
+  try {
+    const { currentUser: { _id } } = res.locals
+    const user = await User.findById(_id)
+    const books = await Book.find({
+      '_id': { $in: user.wishlist.map(e => e.bookId) }
+    }).populate('author').populate('location')
+    res.render('wishlist', { books: books })
+  } catch (err) {
+    console.log(err)
+  }
+})
+
 router.get('/login', (req, res) => {
+  console.log('should ren login')
   res.render('login')
 })
 
@@ -18,6 +65,40 @@ router.get('/logout', (req, res) => {
   req.logout()
   req.flash('success_msg','You have logged out')
   res.redirect('/')
+})
+
+router.put('/addToWishlist/:id', ensureAuthenticated, async (req, res) => {
+  try {
+    const { currentUser } = res.locals
+    const user = await User.findOneAndUpdate({
+      _id: currentUser._id,
+      'wishlist.3': { $exists: false },
+      'wishlist.bookId': { $ne: req.params.id }
+    }, { $push: { wishlist: { bookId: req.params.id } } })
+    if (user) {
+      req.flash('success_msg' , 'Success add to wishlist');
+      res.redirect('/')
+    } else {
+      req.flash('error_msg' , 'Reached limit of 3 or already has book in wishlist');
+      res.redirect(`/books/${req.params.id}`)
+    }
+  }catch(err) {
+    req.flash('error_msg' , 'Success');
+  }
+})
+
+router.delete('/removeFromWishList/:id', async (req, res) => {
+  try {
+    const { currentUser } = res.locals
+    const user = await User.update(
+      { _id: currentUser._id },
+      { $pull: { wishlist: { bookId: req.params.id } } }
+    )
+    console.log(user)
+    res.redirect('/users/wishlist')
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 //Middleware handle
@@ -70,5 +151,20 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/users/login',
     failureFlash  : true
 }))
+
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    const books = await Book.find({
+      '_id': { $in: user.wishlist.map(e => e.bookId) }
+    }).populate('author').populate('location')
+    res.render('users/show', {
+      user: user,
+      books: books
+    })
+  } catch {
+    res.redirect('/')
+  }
+})
 
 module.exports = router

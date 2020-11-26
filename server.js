@@ -17,7 +17,6 @@ const userRouter = require('./routes/users')
 const authorRouter = require('./routes/authors')
 const bookRouter = require('./routes/books')
 const locationRouter = require('./routes/locations')
-const orderRouter = require('./routes/orders')
 
 mongoose.connect('mongodb+srv://admin:admin@mylibary.jt0cq.mongodb.net/MyLibary?retryWrites=true&w=majority', {useNewUrlParser: true})
 .then(result => {
@@ -49,9 +48,12 @@ app.use((req,res,next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-  res.locals.currentUser = null;
-  if (_.has(req, 'session.passport.user')) {
-    res.locals.currentUser = req.session.passport.user
+  if (!res.locals.currentUser) {
+    if (_.has(req, 'session.passport.user')) {
+      res.locals.currentUser = req.session.passport.user
+    } else {
+      res.locals.currentUser = null;
+    }
   }
   next();
 })
@@ -61,7 +63,6 @@ app.use('/users', userRouter)
 app.use('/authors', authorRouter)
 app.use('/books', bookRouter)
 app.use('/locations', locationRouter)
-app.use('/orders', orderRouter)
 
 app.listen(3000,() => {
     console.log('Listening to port 3000')

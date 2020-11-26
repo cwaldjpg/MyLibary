@@ -6,6 +6,7 @@
 @import 'shared/author.css';
 @import 'shared/books.css';
 @import 'shared/auth.css';
+@import 'shared/wishlist.css';
 
 :root {
   font-family: 'FS Core Magic Rough';
@@ -36,11 +37,6 @@ body {
   font-weight: 500;
 }
 
-@media only screen and (max-width: 480px){
-  .page-header {
-    font-size: 1rem;
-  }
-}
 
 .error-message {
   text-align: center;
@@ -50,4 +46,16 @@ body {
 .success-message {
   text-align: center;
   color: #26ff00;
+}
+
+@media only screen and (max-width: 480px){
+  :root {
+    font-family: 'FS Core Magic Rough';
+    font-size: 16px;
+    color: var(--color-text-light);
+  }
+
+  .page-header {
+    font-size: 1rem;
+  }
 }

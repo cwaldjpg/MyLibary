@@ -1,8 +1,8 @@
 const express = require('express')
-const passport = require('passport')
 
 const router = express.Router()
 const Book = require('../models/book')
+const User = require('../models/user')
 
 router.get('/', async (req, res) => {
   let books

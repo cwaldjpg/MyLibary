@@ -7,10 +7,12 @@
         <li><a href='/users/register'>Register</a></li>
       <% } %>
       <% if (currentUser && currentUser.role === 0) { %>
+        <li><a href='/users/wishlist'>Wishlist</a></li>
         <li><a href='/authors'>Authors</a></li>
         <li><a href='/books'>Books</a></li>
       <% } %>
       <% if (currentUser && currentUser.role === 1) { %>
+        <li><a href='/users'>Users List</a></li>
         <li><a href='/authors/new'>Add Author</a></li>
         <li><a href='/books/new'>Add Book</a></li>
       <% } %>

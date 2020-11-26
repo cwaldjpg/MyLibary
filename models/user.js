@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose'); 
 
+const wishlistSchema = new mongoose.Schema({
+  bookId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Book'
+  },
+  date: {
+    type: Date
+  }
+})
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,6 +27,10 @@ const userSchema = new mongoose.Schema({
   role: {
     type: Number,
     required: true
+  },
+  wishlist: {
+    type: [wishlistSchema],
+    default: []
   },
   date: {
     type: Date,

@@ -11,12 +11,6 @@
   font-weight: var(--nav-title-font-weight);
 }
 
-@media only screen and (max-width: 480px){
-  .header-title {
-    font-size: 2rem;
-  }
-}
-
 .header-nav {
   display: flex;
   flex-wrap: wrap;
@@ -44,4 +38,15 @@
 
 .header-nav li a:hover, .header-title:hover {
   color: white;
+}
+
+@media only screen and (max-width: 568px){
+  .header-title {
+    font-size: 2rem;
+  }
+
+  .header-nav li a {
+    font-size: 16px;
+    padding: 12px;
+  }
 }

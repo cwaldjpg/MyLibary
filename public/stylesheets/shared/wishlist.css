@@ -1,0 +1,16 @@
+table {
+  border: 1px solid var(--color-text-light);
+  font-family: "iCiel Fester Semi-Condensed";
+  text-align: center;
+}
+
+@media only screen and (max-width: 500px) {
+  td > img {
+    display: none
+  }
+
+  td ~ button {
+    padding: 10px
+  }
+}
+

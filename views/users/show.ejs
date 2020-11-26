@@ -1,0 +1,30 @@
+<h2 class="page-header"><%= user.name %></h2>
+<div class="btn-row">
+  <a class="btn btn-primary" href="/users/<%= user.id %>/edit">Edit</a>
+  <%- include('../partials/deleteForm',{ url: `/users/${user.id}` }) %>
+  <a class="btn btn-danger" href="/users">Back</a>
+</div>
+<table style="width:100%; margin-top: 20px">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Sách</th>
+      <th>Tác giả</th>
+      <th>Địa điểm</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% books.forEach(book => { %>
+      <tr>
+        <td>
+          <img width="120px" src="<%= book.coverImagePath %>">
+        </td>
+        <td><%= book.title %></td>
+        <td><%= book.author.name %></td>
+        <td><%= book.location.name %></td>
+        <td><%- include('./partials/deleteForm', { url: `/users/removeFromWishlist/${book.id}` }) %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
