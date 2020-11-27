@@ -6,7 +6,6 @@
       <th>Sách</th>
       <th>Tác giả</th>
       <th>Địa điểm</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -18,7 +17,6 @@
         <td><%= book.title %></td>
         <td><%= book.author.name %></td>
         <td><%= book.location.name %></td>
-        <td><%- include('./partials/deleteForm', { url: `/users/removeFromWishlist/${book.id}` }) %></td>
       </tr>
     <% }) %>
   </tbody>

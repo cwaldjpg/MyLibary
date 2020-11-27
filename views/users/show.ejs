@@ -23,7 +23,7 @@
         <td><%= book.title %></td>
         <td><%= book.author.name %></td>
         <td><%= book.location.name %></td>
-        <td><%- include('./partials/deleteForm', { url: `/users/removeFromWishlist/${book.id}` }) %></td>
+        <td><%- include('../partials/deleteForm', { url: `/users/${user.id}/removeFromWishlist/${book.id}` }) %></td>
       </tr>
     <% }) %>
   </tbody>

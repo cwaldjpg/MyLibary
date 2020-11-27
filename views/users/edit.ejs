@@ -1,8 +1,10 @@
-<h2 class="page-header">Edit Author</h2>
-<form action="/authors/<%= author.id %>?_method=PUT" method="POST">
-  <%- include('_form_fields') %>
-  <div class="form-row form-row-end btn-row">
-    <a class="btn btn-danger" href="/authors">Cancel</a>
-    <button class="btn btn-primary" type="submit">Update</button>
-  </div>
-</form>
+<div class="auth-container">
+  <h2 class="page-header">Edit User</h2>
+  <form action="/users/<%= user.id %>?_method=PUT" method="POST">
+    <%- include('_form_fields') %>
+    <div class="auth-submit" style="justify-content: space-around;">
+      <a class="btn btn-danger" href="/users">Cancel</a>
+      <button class="btn btn-primary" type="submit">Update</button>
+    </div>
+  </form>
+</div>

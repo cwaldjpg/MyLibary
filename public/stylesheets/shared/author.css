@@ -8,3 +8,13 @@
   font-size: 1.5rem;
   font-family: 'Montserrat Semi'; 
 }
+
+@media only screen and (max-width: 435px){
+  .author-row {
+    flex-direction: column;
+  }
+
+  .btn {
+    padding: 8px 12px
+  }
+}

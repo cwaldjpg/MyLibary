@@ -53,7 +53,6 @@ router.get('/wishlist', ensureAuthenticated, async (req, res) => {
 })
 
 router.get('/login', (req, res) => {
-  console.log('should ren login')
   res.render('login')
 })
 
@@ -67,35 +66,52 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.put('/addToWishlist/:id', ensureAuthenticated, async (req, res) => {
+router.put('/addToWishlist/:bookId', ensureAuthenticated, async (req, res) => {
   try {
     const { currentUser } = res.locals
-    const user = await User.findOneAndUpdate({
-      _id: currentUser._id,
-      'wishlist.3': { $exists: false },
-      'wishlist.bookId': { $ne: req.params.id }
-    }, { $push: { wishlist: { bookId: req.params.id } } })
-    if (user) {
-      req.flash('success_msg' , 'Success add to wishlist');
-      res.redirect('/')
-    } else {
-      req.flash('error_msg' , 'Reached limit of 3 or already has book in wishlist');
-      res.redirect(`/books/${req.params.id}`)
-    }
+    const book = await Book.findById(req.params.bookId)
+    if (book.inventory > 0 ) {
+      const user = await User.findOneAndUpdate({
+        _id: currentUser._id,
+        'wishlist.3': { $exists: false },
+        'wishlist.bookId': { $ne: req.params.bookId }
+      }, { $push: { wishlist: { bookId: req.params.bookId } } })
+      if (user) {
+        await Book.findOneAndUpdate({ _id: req.params.bookId }, { $inc: { inventory: -1 } })
+        req.flash('success_msg' , 'Success add to wishlist');
+        res.redirect('/')
+      } else {
+        req.flash('error_msg' , 'Reached limit of 3 or already has book in wishlist');
+        res.redirect(`/books/${req.params.bookId}`)
+      }
+     }
   }catch(err) {
     req.flash('error_msg' , 'Success');
   }
 })
 
-router.delete('/removeFromWishList/:id', async (req, res) => {
+router.delete('/removeFromWishList/:bookId', async (req, res) => {
   try {
     const { currentUser } = res.locals
-    const user = await User.update(
+    await User.update(
       { _id: currentUser._id },
-      { $pull: { wishlist: { bookId: req.params.id } } }
+      { $pull: { wishlist: { bookId: req.params.bookId } } }
     )
-    console.log(user)
+    await Book.findOneAndUpdate({ _id: req.params.bookId }, { $inc: { inventory: 1 } })
     res.redirect('/users/wishlist')
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+router.delete('/:userId/removeFromWishList/:bookId', async (req, res) => {
+  try {
+    await User.update(
+      { _id: req.params.userId },
+      { $pull: { wishlist: { bookId: req.params.bookId } }}
+    )
+    await Book.findOneAndUpdate({ _id: req.params.bookId }, { $inc: { inventory: 1 } })
+    res.redirect(`/users/${req.params.userId}`)
   } catch (err) {
     console.log(err)
   }
@@ -146,15 +162,17 @@ router.post('/register', async (req, res) => {
   }
 })
 
+// login
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/users/login',
     failureFlash  : true
 }))
 
-router.get('/:id', async (req, res) => {
+// Show user detail (admin)
+router.get('/:userId', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id)
+    const user = await User.findById(req.params.userId)
     const books = await Book.find({
       '_id': { $in: user.wishlist.map(e => e.bookId) }
     }).populate('author').populate('location')
@@ -164,6 +182,38 @@ router.get('/:id', async (req, res) => {
     })
   } catch {
     res.redirect('/')
+  }
+})
+
+//Edit
+router.get('/:userId/edit', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId)
+    res.render('users/edit', { user: user })
+  } catch {
+    res.redirect('/authors')
+  }
+})
+
+//Update
+router.put('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    if (req.body.password != null && req.body.password !== '') {
+      if (req.body.password.length < 6) res.render('register', {
+        errorMessage: 'Password atleast 6 characters',
+        name: req.body.name,
+        email: req.body.email
+      })
+      user.password = await bcrypt.hash(req.body.password, 10)
+    }
+    
+    user.name = req.body.name
+    user.email = req.body.email
+    await user.save()
+    res.redirect('/users')
+  } catch {
+    console.log('error')
   }
 })
 

@@ -80,3 +80,17 @@
   color: var(--color-text-light);
   font-size: inherit;
 }
+
+@media only screen and (max-width: 700px){
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row > .form-item {
+    margin: 0
+  }
+
+  .btn-row > * {
+    margin: 0
+  }
+}

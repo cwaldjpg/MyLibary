@@ -1,8 +1,8 @@
-<div style="display: flex; align-items: center;">
-  <h2 class="page-header" style="margin-right: 50px;"><%= book.title %></h2>
+<div style="display: flex; justify-content: center;">
+  <h2 class="page-header"><%= book.title %></h2>
 </div>
 <div class="book-details">
-  <div style="padding-right: 50px">
+  <div class="book-details-container">
     <img class="book-cover" src="<%= book.coverImagePath %>">
     <div class="book-details-btn-grid">
       <% if (currentUser && currentUser.role === 1) { %>
