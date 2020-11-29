@@ -39,7 +39,7 @@
   <% }) %>
 
   <!-- Check if authenticated then show it   -->
-  <%- include('_form_rating') %>
+  <% if (currentUser ) { %> <%- include('_form_rating') %> <% } %>
 </div>
 
 <script>
@@ -47,7 +47,6 @@
   let bookId = "<%= book.id %>";
 
   function myfunction(event) {
-    console.log(event.target.value);
     starValue = event.target.value;
   }
   document.querySelectorAll("input[name='rate'][type='radio']").forEach((input) => {
