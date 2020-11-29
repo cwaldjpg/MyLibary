@@ -1,0 +1,44 @@
+.rating {
+  float: left;
+  height: 46px;
+  padding: 0 10px;
+  position: relative;
+  display: block;
+}
+.rating:not(:checked) > input {
+  position: absolute;
+  /* top: -9999px; */
+  opacity: 0;
+}
+.rating:not(:checked) > label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 30px;
+  color: #ccc;
+}
+.rating:not(:checked) > label:before {
+  content: "★ ";
+}
+.rating > input:checked ~ label {
+  color: #ffc700;
+}
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #deb217;
+}
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+
+/* input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+} */

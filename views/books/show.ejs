@@ -1,18 +1,17 @@
-<div style="display: flex; justify-content: center;">
+<div style="display: flex; justify-content: center">
   <h2 class="page-header"><%= book.title %></h2>
 </div>
 <div class="book-details">
   <div class="book-details-container">
-    <img class="book-cover" src="<%= book.coverImagePath %>">
+    <img class="book-cover" src="<%= book.coverImagePath %>" />
     <div class="book-details-btn-grid">
       <% if (currentUser && currentUser.role === 1) { %>
-        <a class="btn btn-primary" href="/books/<%= book.id %>/edit">Edit</a>
-        <%- include('../partials/deleteForm', { url: `/books/${book.id}` }) %>
-      <% } %>
+      <a class="btn btn-primary" href="/books/<%= book.id %>/edit">Edit</a>
+      <%- include('../partials/deleteForm', { url: `/books/${book.id}` }) %> <% } %>
       <a class="btn btn-primary book-details-author-button" href="/authors/<%= book.author.id %>">View Author</a>
     </div>
     <form method="POST" action="/users/addToWishlist/<%= book.id %>?_method=PUT">
-      <button style="width: 100%; margin-top: 10px;" class="btn btn-secondary" type="submit">+ Wishlist</button>
+      <button style="width: 100%; margin-top: 10px" class="btn btn-secondary" type="submit">+ Wishlist</button>
     </form>
   </div>
   <div class="book-details-grid">
@@ -27,8 +26,56 @@
     <div class="book-details-label">Số trang:</div>
     <div class="description"><%= book.pageCount %></div>
     <% if (book.description) { %>
-      <div class="book-details-label">Giới thiệu sản phẩm:</div>
-      <div class="description"><%= book.description %></div>
+    <div class="book-details-label">Giới thiệu sản phẩm:</div>
+    <div class="description"><%= book.description %></div>
     <% } %>
   </div>
 </div>
+<div class="book-rating">
+  <!-- Loop rating  -->
+  <% book.rating.forEach(rating => { %>
+  <p>Star : <%=rating.ratingNumber %></p>
+  <p>User Rating : <%=rating.userRating.name %></p>
+  <% }) %>
+
+  <!-- Check if authenticated then show it   -->
+  <%- include('_form_rating') %>
+</div>
+
+<script>
+  let starValue = 0;
+  let bookId = "<%= book.id %>";
+
+  function myfunction(event) {
+    console.log(event.target.value);
+    starValue = event.target.value;
+  }
+  document.querySelectorAll("input[name='rate'][type='radio']").forEach((input) => {
+    input.addEventListener("change", myfunction);
+  });
+
+  document.getElementById("vote").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const fakeData = {
+      rating: {
+        ratingNumber: starValue,
+        userRating: "5fbf54509fac8e80e40f1735",
+      },
+    };
+
+    fetch(`http://localhost:3000/books/${bookId}/rating`, {
+      method: "put",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8", // Indicates the content
+      },
+      body: JSON.stringify(fakeData),
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
+  });
+</script>

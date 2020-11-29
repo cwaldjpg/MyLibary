@@ -1,20 +1,23 @@
-@import 'shared/variables.css';
-@import 'shared/fonts.css';
-@import 'shared/header.css';
-@import 'shared/buttons.css';
-@import 'shared/form.css';
-@import 'shared/author.css';
-@import 'shared/books.css';
-@import 'shared/auth.css';
-@import 'shared/wishlist.css';
+@import "shared/variables.css";
+@import "shared/fonts.css";
+@import "shared/header.css";
+@import "shared/buttons.css";
+@import "shared/rating.css";
+@import "shared/form.css";
+@import "shared/author.css";
+@import "shared/books.css";
+@import "shared/auth.css";
+@import "shared/wishlist.css";
 
 :root {
-  font-family: 'FS Core Magic Rough';
+  font-family: "FS Core Magic Rough";
   font-size: 20px;
   color: var(--color-text-light);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -37,7 +40,6 @@ body {
   font-weight: 500;
 }
 
-
 .error-message {
   text-align: center;
   color: hsl(var(--color-danger-hue), 100%, 50%);
@@ -48,7 +50,7 @@ body {
   color: #26ff00;
 }
 
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 480px) {
   .page-header {
     font-size: 1rem;
     text-align: center;
