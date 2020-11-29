@@ -32,10 +32,20 @@
   </div>
 </div>
 <div class="book-rating">
+  <h4>User Rating</h4>
+
   <!-- Loop rating  -->
   <% book.rating.forEach(rating => { %>
-  <p>Star : <%=rating.ratingNumber %></p>
-  <p>User Rating : <%=rating.userRating.name %></p>
+  <div class="list-rating-item">
+    <p><%=rating.userRating.name %>:</p>
+    <p class="stars-rating">
+      <% for (let i =0 ; i < 5; i++) { %> <%if(i < rating.ratingNumber) { %>
+      <span class="fa fa-star ratingChecked"></span>
+      <% } else { %>
+      <span class="fa fa-star"></span>
+      <% } %> <%}%>
+    </p>
+  </div>
   <% }) %>
 
   <!-- Check if authenticated then show it   -->
@@ -46,6 +56,12 @@
   let starValue = 0;
   let bookId = "<%= book.id %>";
 
+  //fuck ejs
+  let user = <%- JSON.stringify(currentUser) %>;
+  // console.log("user", user);
+
+  if (user) userId = user._id;
+
   function myfunction(event) {
     starValue = event.target.value;
   }
@@ -53,28 +69,35 @@
     input.addEventListener("change", myfunction);
   });
 
-  document.getElementById("vote").addEventListener("click", (e) => {
-    e.preventDefault();
+  const voteBtn = document.getElementById("vote");
+  if (voteBtn)
+    document.getElementById("vote").addEventListener("click", (e) => {
+      e.preventDefault();
 
-    const fakeData = {
-      rating: {
-        ratingNumber: starValue,
-        userRating: "5fbf54509fac8e80e40f1735",
-      },
-    };
+      const fakeData = {
+        rating: {
+          ratingNumber: starValue,
+          userRating: user._id,
+        },
+      };
 
-    fetch(`http://localhost:3000/books/${bookId}/rating`, {
-      method: "put",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8", // Indicates the content
-      },
-      body: JSON.stringify(fakeData),
-    })
-      .then(function (response) {
-        return response.json();
+      console.log(fakeData);
+      fetch(`http://localhost:3000/books/${bookId}/rating`, {
+        method: "put",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8", // Indicates the content
+        },
+        body: JSON.stringify(fakeData),
       })
-      .then(function (data) {
-        console.log(data);
-      });
-  });
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          if(data.status === 200) {
+            location.reload();
+            return ;
+          }
+          alert(data.message)
+        });
+    });
 </script>

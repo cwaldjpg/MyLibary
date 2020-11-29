@@ -128,9 +128,18 @@ router.put("/:id/rating", async (req, res) => {
   let book;
   try {
     book = await Book.findById(req.params.id);
-    book.rating = [...book.rating, req.body.rating];
-    await book.save();
-    res.json({ status: 200 });
+
+    const checkExits = book.rating.some((rating) => {
+      return rating.userRating == req.body.rating.userRating;
+    });
+
+    if (!checkExits) {
+      book.rating = [...book.rating, req.body.rating];
+      await book.save();
+      return res.json({ status: 200 });
+    }
+
+    return res.status(409).json({ status: 409, message: "user rating is existed" });
   } catch (err) {
     res.status(400).json({ status: 400, errorMessage: err.message });
   }
