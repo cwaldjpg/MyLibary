@@ -66,23 +66,23 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.put('/addToWishlist/:bookId', ensureAuthenticated, async (req, res) => {
+router.put('/addToWishlist/:id', ensureAuthenticated, async (req, res) => {
   try {
     const { currentUser } = res.locals
-    const book = await Book.findById(req.params.bookId)
+    const book = await Book.findById(req.params.id)
     if (book.inventory > 0 ) {
       const user = await User.findOneAndUpdate({
         _id: currentUser._id,
         'wishlist.3': { $exists: false },
-        'wishlist.bookId': { $ne: req.params.bookId }
-      }, { $push: { wishlist: { bookId: req.params.bookId } } })
+        'wishlist.bookId': { $ne: req.params.id }
+      }, { $push: { wishlist: { bookId: req.params.id } } })
       if (user) {
-        await Book.findOneAndUpdate({ _id: req.params.bookId }, { $inc: { inventory: -1 } })
+        await Book.findOneAndUpdate({ _id: req.params.id }, { $inc: { inventory: -1 } })
         req.flash('success_msg' , 'Success add to wishlist');
         res.redirect('/')
       } else {
         req.flash('error_msg' , 'Reached limit of 3 or already has book in wishlist');
-        res.redirect(`/books/${req.params.bookId}`)
+        res.redirect(`/books/${req.params.id}`)
       }
      }
   }catch(err) {
@@ -90,14 +90,14 @@ router.put('/addToWishlist/:bookId', ensureAuthenticated, async (req, res) => {
   }
 })
 
-router.delete('/removeFromWishList/:bookId', async (req, res) => {
+router.delete('/removeFromWishList/:id', async (req, res) => {
   try {
     const { currentUser } = res.locals
     await User.update(
       { _id: currentUser._id },
-      { $pull: { wishlist: { bookId: req.params.bookId } } }
+      { $pull: { wishlist: { bookId: req.params.id } } }
     )
-    await Book.findOneAndUpdate({ _id: req.params.bookId }, { $inc: { inventory: 1 } })
+    await Book.findOneAndUpdate({ _id: req.params.id }, { $inc: { inventory: 1 } })
     res.redirect('/users/wishlist')
   } catch (err) {
     console.log(err)
