@@ -1,55 +1,61 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+
+const ratingSchema = new mongoose.Schema({
+  ratingNumber: { type: Number },
+  userRating: {  type: mongoose.Schema.Types.ObjectId, ref: "User" },
+});
 
 const bookSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
-    type: String
+    type: String,
   },
   publishDate: {
     type: Date,
-    required: true
+    required: true,
   },
   pageCount: {
     type: Number,
-    required: true
+    required: true,
   },
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
   coverImage: {
     type: Buffer,
-    required: true
+    required: true,
   },
   coverImageType: {
     type: String,
-    required: true
+    required: true,
   },
   inventory: {
     type: Number,
     required: true,
-    default: 1
+    default: 1,
   },
   location: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Location'
+    ref: "Location",
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Author'
-  }
-})
+    ref: "Author",
+  },
+  rating: [ratingSchema],
+});
 
-bookSchema.virtual('coverImagePath').get(function() {
+bookSchema.virtual("coverImagePath").get(function () {
   if (this.coverImage != null && this.coverImageType != null) {
-    return `data:${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`
+    return `data:${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString("base64")}`;
   }
-})
+});
 
-module.exports = mongoose.model('Book', bookSchema)
+module.exports = mongoose.model("Book", bookSchema);
